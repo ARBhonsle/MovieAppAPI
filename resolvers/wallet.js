@@ -1,12 +1,10 @@
-const { walletSchema } = require("../models/userWallet");
-const {validateRegisterInput,
-  validateLoginInput,}=require('../auth-util/validator')
+const wallet = require("../models/userWallet");
 var money;
 
 const createWallet=()=>{
     money=100;
     return {
-        walletMoney=money,
+        amount=money,
         id:user.id
     }
 }
@@ -14,13 +12,13 @@ const createWallet=()=>{
 const addMoney=async(...props)=>{
     const {transactionAmount, user}=props;    
     return {
-    money:money+transactionAmount,    
+    amount:money+transactionAmount,    
     id: user.id,
     }
 }
 const payTransaction=async(...props)=>{
-    const {transactionAmount, user}=props;
-    if(transactionAmount<money){
+    const {transaction}=props;
+    if(transaction.pricePerTicket*transaction.count<money){
         console.log("Transaction running");
     }
     if(money<100){
@@ -28,7 +26,7 @@ const payTransaction=async(...props)=>{
         throw new Error("Money less than 100");
     }
     return {
-        money:money,
+        amount:money,
         id:user.id,
     }
 }

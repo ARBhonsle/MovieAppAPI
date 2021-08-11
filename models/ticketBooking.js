@@ -13,6 +13,10 @@ const ticketSchema = new Schema({
     min: 0,
     max: 15,
   },
+  pricePerTicket: {
+    type: Number,
+    required: true,
+  },
   user: {
     type: Schema.Types.ObjectId,
     ref: "user",

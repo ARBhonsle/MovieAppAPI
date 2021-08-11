@@ -47,16 +47,9 @@ const userLogin = async ({ name, password }) => {
     token,
   };
 };
-const userRegister = ({
-  registerInput: { name, image, email, password, confirmPassword },
-}) => {
+const userRegister = ({ registerInput: { name, image, email, password } }) => {
   // Validate user data
-  const { valid, errors } = validateRegisterInput(
-    name,
-    email,
-    password,
-    confirmPassword
-  );
+  const { valid, errors } = validateRegisterInput(name, email, password);
   if (!valid) {
     throw new Error("Errors", { errors });
   }

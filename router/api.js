@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
 
-app.post("/signup", function (req, res) {
+app.post("/user/signup", function (req, res) {
   if (!req.body.id || !req.body.password) {
     res.status("400");
     res.send("Invalid details!");
