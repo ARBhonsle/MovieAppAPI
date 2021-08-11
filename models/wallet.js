@@ -13,4 +13,4 @@ const walletSchema = new Schema({
   },
 });
 
-module.exports = mongoose.model("UserWallet", waletSchema);
+module.exports = mongoose.model("UserWallet", walletSchema);

@@ -1,21 +1,19 @@
-const Movie = require("../models/movie");
-const movie = await Movie.findOne({ name });
-const showAllMovie = async ({ movie }) => {
-  const list = movie().map((val) => {
-    return val;
-  });
+let movie = require("../models/movie");
+
+const showAllMovie = async () => {
+  const list = await movie.find({});
   return list;
 };
-const showMovieByName = async ({ movie }) => {
-  const list = movie.map((val) => val.name);
+const showMovieByName = async () => {
+  const movieList = await movie.find({ name });
+  return movieList;
+};
+const showMovieByGenre = async () => {
+  const list = await movie.find({ genre });
   return list;
 };
-const showMovieByGenre = async ({ movie }) => {
-  const list = movie.map((val) => val.genre);
-  return list;
-};
-const showMovieByType = async ({ movie }) => {
-  const list = movie.map((val) => val.type);
+const showMovieByType = async () => {
+  const list = await movie.find({ type });
   return list;
 };
 module.exports = {

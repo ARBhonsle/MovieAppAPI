@@ -14,20 +14,12 @@ mongoose
     console.error(err);
   });
 
-app.get("/api", (req, res) => res.send("Working"));
-
-// support for front-end files that'll be added in fu
-app.use(express.json());
-
 app.use("/api", require("./router/api"));
-
-app.get("/signup", function (req, res) {
-  res.render("signup");
-});
-
-app.use(function (err, req, res, next) {
-  res.status(422).send({ error: err.message });
-});
+app.use("/api/user/signup", require("./router/signup"));
+//app.use("/api/user/login", require("./router/login"));
+app.use("/api/movies", require("./router/movies"));
+//app.use("/api/tickets", require("./router/tickets"));
+app.use("/api/wallet", require("./router/wallet"));
 
 app.listen(port, function () {
   console.log(`Now listening for requests on ${port}`);
