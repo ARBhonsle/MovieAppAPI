@@ -21,6 +21,10 @@ app.use(express.json());
 
 app.use("/api", require("./router/api"));
 
+app.get("/signup", function (req, res) {
+  res.render("signup");
+});
+
 app.use(function (err, req, res, next) {
   res.status(422).send({ error: err.message });
 });
