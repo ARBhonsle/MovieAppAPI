@@ -7,15 +7,20 @@ app.post("/user/signup", function (req, res) {
     res.status("400");
     res.send("Invalid details!");
   } else {
-    Users.filter(function (user) {
+    User.filter((user) => {
       if (user.id === req.body.id) {
         res.render("signup", {
           message: "User Already Exists! Login or choose another user id",
         });
       }
     });
-    var newUser = { id: req.body.id, password: req.body.password };
-    Users.push(newUser);
+    var newUser = {
+      id: req.body.id,
+      password: req.body.password,
+      image: req.body.image,
+      email: req.body.email,
+    };
+    User.push(newUser);
     req.session.user = newUser;
     res.redirect("/protected_page");
   }
@@ -38,7 +43,7 @@ router.post("/user", function (req, res, next) {
 });
 
 router.put("/user/:id", function (req, res, next) {
-  User.findOneAndUpdate({ _id: req.params.id }, req.body).then(function (user) {
+  User.findOneAndUpdate({ _id: req.params.id }, req.body).then(async (user) => {
     User.findOne({ _id: req.params.id }).then(function (student) {
       res.send(user);
     });
@@ -50,6 +55,5 @@ router.delete("/user/:id", function (req, res, next) {
     res.send(user);
   });
 });
-module.exports = router;
 
-router.post("/user/");
+module.exports = router;
