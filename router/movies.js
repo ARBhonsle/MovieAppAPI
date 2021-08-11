@@ -3,6 +3,8 @@ var router = express.Router();
 const movies = require("../models/movie");
 const MongoClient = require("mongodb").MongoClient;
 const url = require("../config").MONGODB;
+const collection = "movies_app_api";
+const dbname = "wallet";
 
 router.get("/:id", function (req, res) {
   var currMovie = movies.filter(function (movie) {
@@ -13,8 +15,8 @@ router.get("/:id", function (req, res) {
   app.get("/:name", (req, res) => {
     MongoClient.connect(url, function (err, db) {
       if (err) throw err;
-      var dbo = db.db("MoviesAPI");
-      dbo.collection("Movies").findOne(
+      var dbo = db.db("movies");
+      dbo.collection("movies_app_api").findOne(
         {
           name: req.params.name,
         },
@@ -42,8 +44,8 @@ router.post("/", function (req, res) {
     MongoClient.connect(url, function (err, db) {
       if (err) throw err;
 
-      var dbo = db.db("MoviesAPI");
-      dbo.dropCollection("Movies").insert.insertOne(
+      var dbo = db.db("movies");
+      dbo.dropCollection("movies_app_api").insert.insertOne(
         {
           id: newId,
           name: req.body.name,

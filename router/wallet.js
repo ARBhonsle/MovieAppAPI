@@ -32,8 +32,8 @@ router.post("/:id", function (req, res) {
     MongoClient.connect(url, function (err, db) {
       if (err) throw err;
 
-      var dbo = db.db("MoviesAPI");
-      dbo.dropCollection("Movies").insert.insertOne(
+      var dbo = db.db("wallets");
+      dbo.collection("movies_app_api").insert.insertOne(
         {
           id: req.params.id,
           amount: 100,
