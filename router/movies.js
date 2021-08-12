@@ -3,30 +3,39 @@ var router = express.Router();
 const movies = require("../models/movie");
 const MongoClient = require("mongodb").MongoClient;
 const url = require("../config").MONGODB;
+const { body } = require("express-validator/check");
+const { sanitizeBody } = require("express-validator/filter");
 const collection = "movies_app_api";
 const dbname = "wallet";
 
 router.get("/:id", function (req, res) {
-  var currMovie = movies.filter(function (movie) {
-    if (movie.id == req.params.id) {
-      return true;
-    }
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db("movies_app_api");
+    dbo
+      .collection("movies")
+      .findOne({ id: req.params.id }, function (err, result) {
+        if (err) throw err;
+        res.json(result);
+        db.close();
+      });
   });
-  app.get("/:name", (req, res) => {
-    MongoClient.connect(url, function (err, db) {
-      if (err) throw err;
-      var dbo = db.db("movies");
-      dbo.collection("movies_app_api").findOne(
-        {
-          name: req.params.name,
-        },
-        function (err, result) {
-          if (err) throw err;
-          res.json(result);
-          db.close();
-        }
-      );
-    });
+});
+router.get("/:name", (req, res) => {
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err;
+    var dbo = db.db("movies");
+    dbo.collection("movies_app_api").findOne(
+      {
+        name: req.params.name,
+      },
+      function (err, result) {
+        if (err) throw err;
+        res.status(200);
+        res.json(result);
+        db.close();
+      }
+    );
   });
 
   if (currMovie.length == 1) {
@@ -37,33 +46,32 @@ router.get("/:id", function (req, res) {
   }
 });
 router.post("/", function (req, res) {
-  if (!req.body.name || !req.body.type || !req.body.genre) {
+  if (!req.body.name || !req.body.type || !req.body.tickets || !req.body.id) {
     res.status(400);
     res.json({ message: "Bad Request" });
   } else {
     MongoClient.connect(url, function (err, db) {
       if (err) throw err;
-
-      var dbo = db.db("movies");
-      dbo.dropCollection("movies_app_api").insert.insertOne(
+      var dbo = db.db("movies_app_api");
+      dbo.collection("movies").insertOne(
         {
-          id: newId,
+          id: req.body.id,
           name: req.body.name,
           type: req.body.year,
-          tickets: 0,
+          tickets: req.body.tickets,
         },
         function (err, result) {
           if (err) throw err;
-          res.json(result);
+          res.status(200);
+          res.json(result.ops);
           db.close();
         }
       );
     });
-    res.status(200);
-    res.json({ message: "New movie created.", location: "/movies/" + newId });
   }
 });
 
+/*
 router.put("/:id", function (req, res) {
   if (!req.body.id || !req.body.tickets) {
     res.status(400);
@@ -79,9 +87,10 @@ router.put("/:id", function (req, res) {
       movies.push({
         id: req.params.id,
         name: req.body.name,
-        year: req.body.year,
-        rating: req.body.rating,
+        type: req.body.type,
+        tickets: req.body.tickets,
       });
+      res.status(200);
       res.json({
         message: "New movie created.",
         location: "/movies/" + req.params.id,
@@ -93,6 +102,7 @@ router.put("/:id", function (req, res) {
         year: req.body.year,
         rating: req.body.rating,
       };
+      res.status(200);
       res.json({
         message: "Movie id " + req.params.id + " updated.",
         location: "/movies/" + req.params.id,
@@ -100,6 +110,7 @@ router.put("/:id", function (req, res) {
     }
   }
 });
+*/
 
 router.delete("/:id", function (req, res) {
   var removeIndex = movies
